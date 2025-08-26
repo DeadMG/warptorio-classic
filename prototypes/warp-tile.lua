@@ -30,7 +30,7 @@ data:extend({
             result = 'warp-tile'
         },
         autoplace = {
-            probability_expression = "0",
+            probability_expression = "-inf",
             default_enabled = false,
         },
         collision_mask = { layers = { ['ground_tile'] = true } },
@@ -43,7 +43,7 @@ data:extend({
         category = 'crafting',
         order_string = "b[concrete]-a[plain]",
         subgroup = 'terrain',
-		icons = { { icon = "__warp-age__/graphics/warp-tile.png", tint = tint, icon_size = 64 } },
+		icons = { { icon = "__warptorio-classic__/graphics/warp-tile.png", tint = tint, icon_size = 64 } },
         ingredients = {
             { type = "item", name = "copper-plate", amount = 100 }
         },
@@ -57,7 +57,7 @@ data:extend({
         type = 'item',
         name = 'warp-tile',
         stack_size = 50,
-		icons = { { icon = "__warp-age__/graphics/warp-tile.png", tint = tint, icon_size = 64 } },
+		icons = { { icon = "__warptorio-classic__/graphics/warp-tile.png", tint = tint, icon_size = 64 } },
         place_as_tile = {
             result = 'warp-tile',
             condition = { layers = { ["water_tile"] = true } },

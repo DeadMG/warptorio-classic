@@ -1,9 +1,9 @@
 {
-	"name": "warp-age",
+	"name": "warptorio-classic",
 	"version": "0.1.0",
-	"title": "Warp Age",
+	"title": "Warptorio Classic",
 	"author": "Puppy",
-	"dependencies": ["base >= 2.0", "space-exploration-graphics-5 >= 0.7.1", "space-age"],
+	"dependencies": ["base >= 2.0.60", "enable-all-feature-flags", "space-exploration-graphics", "flib >= 0.16.3", "? space-age"],
 	"description": "Experience intense action",
 	"factorio_version": "2.0"
 }

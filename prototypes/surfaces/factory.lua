@@ -2,7 +2,7 @@ data:extend({
     {
         type = "noise-expression",
         name = "starting_tiles",
-        expression = "(x >= -1) * (x <= 0) * (y >= -1) * (y <= 0)"
+        expression = "if((x >= 0) & (x <= 3) & (y >= 0) & (y <= 3), inf, -inf)"
     },
     {
         type = "noise-expression",
@@ -16,7 +16,6 @@ data:extend({
     },
 })
 
-local original = table.deepcopy(data.raw.planet.nauvis)
 local settings = data.raw.planet.nauvis.map_gen_settings
 
 settings.autoplace_controls = {}
@@ -31,6 +30,7 @@ settings.autoplace_settings = {
     entity = {
         treat_missing_as_default = false,
         settings = {
+            ["warp-console"] = {}
         }
     },
     decorative = {
@@ -43,10 +43,10 @@ settings.autoplace_settings = {
 if settings.cliff_settings then
     settings.cliff_settings.richness = 0
 end
-
 settings.property_expression_names = {
     ['tile:empty-space:probability'] = 'map_end',
     ['tile:warp-tile:probability'] = "starting_tiles",
+    ['entity:warp-console:probability'] = 'starting_console',
 }
 settings.moisture_climate_control = false
 settings.aux_climate_control = false
@@ -57,5 +57,3 @@ render_params.draw_sprite_clouds = false
 
 local surface_props = data.raw.planet.nauvis.surface_properties
 surface_props['day-night-cycle'] = 0
-
-return { original = original }

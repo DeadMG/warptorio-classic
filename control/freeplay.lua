@@ -1,4 +1,4 @@
-function disable_freeplay()
+local function onInit()
     local freeplay = remote.interfaces["freeplay"]
     if freeplay then  -- Disable freeplay popup-message
         if freeplay["set_skip_intro"] then remote.call("freeplay", "set_skip_intro", true) end
@@ -6,8 +6,4 @@ function disable_freeplay()
     end
 end
 
-function setup()
-    disable_freeplay()
-end
-
-return { setup = setup }
+return { onInit = onInit }
