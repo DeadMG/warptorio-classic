@@ -1,8 +1,8 @@
-local tint = require("helpers/tint")
+local tints = require("helpers/tints")
 
 ---@param sprite data.Sprite
 local function setTintOnSprite(sprite)
-    sprite.tint = tint
+    sprite.tint = tints.tint
 
     if sprite.layers then
         for _, layer in ipairs(sprite.layers) do

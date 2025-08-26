@@ -34,4 +34,24 @@ local function onInit()
     storage.generator = game.create_random_generator()
 end
 
-return { surfaces = surfaces, getWarpzoneTicks = getWarpzoneTicks, setNextWarpzone = setNextWarpzone, onInit = onInit, currentWarpzone = currentWarpzone, nextWarpzone = nextWarpzone, nextWarpzoneSeed = nextWarpzoneSeed }
+---@param reactor LuaEntity
+local function registerReactorDestroyed(reactor)
+    storage.reactor_destruction = script.register_on_object_destroyed(reactor)
+end
+
+---@param event EventData.on_object_destroyed
+local function isReactorDestroyed(event)
+    return event.registration_number == storage.reactor_destruction
+end
+
+return {
+    surfaces = surfaces,
+    getWarpzoneTicks = getWarpzoneTicks,
+    setNextWarpzone = setNextWarpzone,
+    onInit = onInit,
+    currentWarpzone = currentWarpzone,
+    nextWarpzone = nextWarpzone,
+    nextWarpzoneSeed = nextWarpzoneSeed,
+    registerReactorDestroyed = registerReactorDestroyed,
+    isReactorDestroyed = isReactorDestroyed,
+}

@@ -2,7 +2,7 @@ data:extend({
     {
         type = "noise-expression",
         name = "starting_tiles",
-        expression = "if((x >= 0) & (x <= 3) & (y >= 0) & (y <= 3), inf, -inf)"
+        expression = "if((x >= 0) & (x <= 3) & (y >= 0) & (y <= 3), 1, 0)"
     },
     {
         type = "noise-expression",
@@ -40,9 +40,6 @@ settings.autoplace_settings = {
     }
 }
 
-if settings.cliff_settings then
-    settings.cliff_settings.richness = 0
-end
 settings.property_expression_names = {
     ['tile:empty-space:probability'] = 'map_end',
     ['tile:warp-tile:probability'] = "starting_tiles",

@@ -1,4 +1,4 @@
-local consoleTint = { r = 1, g = 0.702, b = 0.278, a = 1 }
+local tints = require("helpers/tints")
 
 data:extend({
 	{
@@ -9,7 +9,7 @@ data:extend({
 		vehicle_impact_sound = { filename = "__base__/sound/car-metal-impact.ogg", volume = 1.0 },
 		icons = {
 			{ icon = "__space-exploration-graphics__/graphics/icons/spaceship-console-base.png", icon_size = 64 },
-			{ icon = "__space-exploration-graphics__/graphics/icons/spaceship-console-mask.png", icon_size = 64, tint = consoleTint },
+			{ icon = "__space-exploration-graphics__/graphics/icons/spaceship-console-mask.png", icon_size = 64, tint = tints.counterTint },
 			{ icon = "__space-exploration-graphics__/graphics/icons/spaceship-console-white.png", icon_size = 64 },
 		},
 		icon_size = 64,
@@ -25,7 +25,7 @@ data:extend({
 				{
 					filename = "__space-exploration-graphics__/graphics/entity/spaceship-console/spaceship-console-mask.png",
 					priority = "high",
-					tint = consoleTint,
+					tint = tints.counterTint,
 					frames = 1,
 					width = 256,
 					height = 256,
@@ -65,6 +65,7 @@ data:extend({
 		autoplace = {
 			probability_expression = "0",
 			default_enabled = false,
-		}
+		},
+		is_military_target = true,
 	}
 })

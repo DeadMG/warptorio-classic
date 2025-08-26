@@ -4,6 +4,7 @@ local gui = require("__flib__.gui")
 local console = require("control/console")
 local pollution = require("control/pollution")
 local state = require("control/state")
+local reactor = require("control/reactor")
 
 script.on_init(function()
     state.onInit()
@@ -23,6 +24,20 @@ script.on_event(defines.events.on_gui_opened, function(event)
     else
         console.closeGui(player)
     end
+
+    if event.entity.name == "warp-reactor" then
+        player.opened = nil
+    end
+end)
+
+script.on_event(defines.events.on_entity_cloned, function(event)
+    if event.destination.name == "warp-reactor" then
+        reactor.onCloned(event)
+    end
+end)
+
+script.on_event(defines.events.on_object_destroyed, function(event)
+    reactor.onDestroyed(event)
 end)
 
 script.on_event(defines.events.on_tick, function()

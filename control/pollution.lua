@@ -12,19 +12,7 @@ local function onTick()
     local ticks = state.getWarpzoneTicks()
     local ground = state.surfaces().ground
 
-    ground.pollute({ -1, -1 }, getPollution(ticks), "warp-polluter")
+    ground.pollute({ -1, -1 }, getPollution(ticks), "warp-reactor")
 end
 
----@param surface LuaSurface
-local function init(surface)
-    local polluter = surface.create_entity({
-        name = "warp-polluter",
-        position = { x = 2, y = 2 },
-        direction = defines.direction.north,
-        force = game.forces.player,
-        recipe = "warp-polluter"
-    })
-    polluter.destructible = false
-end
-
-return { onTick = onTick, init = init }
+return { onTick = onTick }

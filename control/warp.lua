@@ -1,14 +1,44 @@
 local surface = require("control/surfaces")
 local state = require("control/state")
-local pollution = require("control/pollution")
+local reactor = require("control/reactor")
 
 local function onInit()
-    local surface = game.create_surface("warp-zone-" .. state.nextWarpzone(), surface.getSurface("nauvis", "default"));
+    local surface = game.create_surface("warp-zone-" .. state.nextWarpzone(), surface.getSurface("nauvis", "default"))
     surface.request_to_generate_chunks({ 0, 0 })
     surface.force_generate_chunk_requests()
 
+    local tiles = {}
+
+    for x = 0, 3, 1 do
+        for y = -4, 2, 1 do
+            table.insert(tiles, { name = "warp-tile", position = { x, y } })
+        end
+    end
+
+    surface.set_tiles(tiles)
+
+    for x = 1, 2, 1 do
+        for y = 0, 1, 1 do
+            surface.set_hidden_tile({ x, y }, nil)
+        end
+    end
+
+    for x = 0, 3, 1 do
+        for y = -4, -1, 1 do
+            surface.set_hidden_tile({ x, y }, nil)
+        end
+    end
+
+    local console = surface.create_entity({
+        name = "warp-console",
+        position = { 2, 1 },
+        direction = defines.direction.north,
+        force = game.forces.player,
+    })
+    console.destructible = false
+
     state.setNextWarpzone(surface)
-    pollution.init(surface)
+    reactor.onInit(surface)
 end
 
 local function warpNext()
