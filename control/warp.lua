@@ -1,6 +1,8 @@
 local surface = require("control/surfaces")
 local state = require("control/state")
 local reactor = require("control/reactor")
+local settings = require("control/settings")
+local identifiers = require("identifiers")
 
 local function onInit()
     local surface = game.create_surface("warp-zone-" .. state.nextWarpzone(), surface.getSurface("nauvis", "default"))
@@ -11,7 +13,7 @@ local function onInit()
 
     for x = 0, 3, 1 do
         for y = -4, 2, 1 do
-            table.insert(tiles, { name = "warp-tile", position = { x, y } })
+            table.insert(tiles, { name = identifiers.warpTile, position = { x, y } })
         end
     end
 
@@ -41,11 +43,43 @@ local function onInit()
     reactor.onInit(surface)
 end
 
+---@param player LuaPlayer
+local function canWarpAnywhere(player)
+    return player.force.technologies[identifiers.remoteHomeWarp].researched
+end
+
+local function canWarpHere(player)
+    local surfaces = state.surfaces()
+
+    if player.surface == surfaces.factory then return true end
+    if player.surface ~= surfaces.ground then return false end -- Unknown 3rd party surface?
+
+    local tile = player.surface.get_tile(player.position)
+    return tile.name == identifiers.warpTile
+end
+
+---@param player LuaPlayer
+local function isPlayerWarpable(player)
+    return canWarpAnywhere(player) or canWarpHere(player)
+end
+
 local function warpNext()
     local originSurface = state.surfaces().ground
 
+    for _, player in pairs(game.players) do
+        if canWarpHere(player) then
+            -- continue
+        elseif canWarpAnywhere(player) then
+            -- teleport them home
+            surface.teleportToSurface(player, originSurface, true)
+        else
+            game.set_lose_ending_info({ title = {"warp-ending.left-behind"}, message={"warp-ending.left-behind-message"} })
+            game.set_game_state({ can_continue = false, game_finished = true, player_won = false })
+        end
+    end
+
     local warp_tiles = {}
-    for _, tile in ipairs(originSurface.find_tiles_filtered({ name={'warp-tile' } })) do
+    for _, tile in ipairs(originSurface.find_tiles_filtered({ name={ identifiers.warpTile } })) do
         table.insert(warp_tiles, tile.position)
     end
 
@@ -74,13 +108,7 @@ local function warpNext()
 
     for _, player in pairs(game.players) do
         if player.surface == originSurface then
-            local tile = originSurface.get_tile(player.position)
-            if tile.name == "warp-tile" then
-                player.teleport(player.position, newSurface, true)
-            else
-                game.set_lose_ending_info({ title = {"warp-ending.left-behind"}, message={"warp-ending.left-behind-message"} })
-                game.set_game_state({ can_continue = false, game_finished = true, player_won = false })
-            end
+            player.teleport(player.position, newSurface, true)
         end
     end
 
@@ -93,4 +121,22 @@ local function warpNext()
     game.delete_surface(originSurface)
 end
 
-return { onInit = onInit, warpNext = warpNext }
+local function autowarpTimer()
+    return settings.getWarpzoneGracePeriodTicks(state.currentWarpzone()) + (10 * 60 * 60)
+end
+
+local function timeTillAutowarp()
+    return autowarpTimer() - state.getWarpzoneTicks()
+end
+
+local function onTick()
+    if (timeTillAutowarp() <= 0) then warpNext() end
+end
+
+return {
+    onInit = onInit,
+    warpNext = warpNext,
+    onTick = onTick,
+    timeTillAutowarp = timeTillAutowarp,
+    isPlayerWarpable = isPlayerWarpable,
+}

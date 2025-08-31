@@ -5,7 +5,7 @@ return {
     tint = tint,
     counterTint = counterTint,
     warpReactorRecipes = {
-        counterTint,
+        { r = 1, g = 0.2, b = 0.2, a = 1 },
         tint,
     }
 }

@@ -1,5 +1,5 @@
 local deepmerge = require("helpers/deepmerge")
-local state = require("control/state")
+local identifiers = require("identifiers")
 
 ---@param settings MapGenSettings
 local function preventAutoplace(settings)
@@ -7,7 +7,7 @@ local function preventAutoplace(settings)
         property_expression_names = {
             ['entity:warp-console:probability'] = '-inf',
             ['tile:empty-space:probability'] = '-inf',
-            ['tile:warp-tile:probability'] = "-inf"
+            ['tile:' .. identifiers.warpTile .. ':probability'] = "-inf"
         }
     })
 end
@@ -29,16 +29,23 @@ end
 
 ---@param player LuaPlayer
 ---@param surface LuaSurface
-local function teleportToSurface(player, surface)
-    local pos = surface.find_non_colliding_position("character", player.position, 128, 1, true)
-    if not pos then
-        pos = surface.find_non_colliding_position("character", {0, 1}, 128, 1, true)
-        if not pos then
-            player.print("warp-teleport.no-position")
+---@param force boolean | nil
+local function teleportToSurface(player, surface, force)
+    if not force and player.surface ~= surface then
+        local pos = surface.find_non_colliding_position("character", player.position, 128, 1, true)
+        if pos then
+            player.teleport(pos, surface)
             return
         end
     end
-    player.teleport(pos, surface)
+
+    local pos = surface.find_non_colliding_position("character", {0, 1}, 128, 1, true)
+    if pos then
+        player.teleport(pos, surface)
+        return
+    end
+
+    player.print("warp-teleport.no-position")
 end
 
 return { getSurface = getSurface, teleportToSurface = teleportToSurface }

@@ -35,8 +35,14 @@ local function onInit()
 end
 
 ---@param reactor LuaEntity
-local function registerReactorDestroyed(reactor)
+local function setCurrentReactor(reactor)
     storage.reactor_destruction = script.register_on_object_destroyed(reactor)
+    storage.reactor = reactor
+end
+
+---@return LuaEntity
+local function getWarpReactor()
+    return storage.reactor
 end
 
 ---@param event EventData.on_object_destroyed
@@ -52,6 +58,7 @@ return {
     currentWarpzone = currentWarpzone,
     nextWarpzone = nextWarpzone,
     nextWarpzoneSeed = nextWarpzoneSeed,
-    registerReactorDestroyed = registerReactorDestroyed,
+    setCurrentReactor = setCurrentReactor,
     isReactorDestroyed = isReactorDestroyed,
+    getWarpReactor = getWarpReactor
 }

@@ -1,3 +1,5 @@
+local identifiers = require("identifiers")
+
 data:extend({
     {
         type = "noise-expression",
@@ -24,7 +26,7 @@ settings.autoplace_settings = {
         treat_missing_as_default = false,
         settings = {
             ["empty-space"] = {},
-            ["warp-tile"] = {}
+            [identifiers.warpTile] = {}
         }
     },
     entity = {
@@ -42,7 +44,7 @@ settings.autoplace_settings = {
 
 settings.property_expression_names = {
     ['tile:empty-space:probability'] = 'map_end',
-    ['tile:warp-tile:probability'] = "starting_tiles",
+    ['tile:' .. identifiers.warpTile .. ':probability'] = "starting_tiles",
     ['entity:warp-console:probability'] = 'starting_console',
 }
 settings.moisture_climate_control = false

@@ -1,8 +1,8 @@
-require("prototypes/entities/warp-console")
-require("prototypes/entities/warp-polluter")
-require("prototypes/entities/warp-reactor")
+require("prototypes/entities/console")
+require("prototypes/entities/reactor")
 
 require("prototypes/warp-tile")
 require("prototypes/space-tile")
 
 require("prototypes/surfaces/factory")
+require("prototypes/technology/remote")

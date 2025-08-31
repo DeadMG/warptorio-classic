@@ -5,6 +5,7 @@ local console = require("control/console")
 local pollution = require("control/pollution")
 local state = require("control/state")
 local reactor = require("control/reactor")
+local remote = require("control/remote")
 
 script.on_init(function()
     state.onInit()
@@ -14,6 +15,11 @@ script.on_init(function()
     freeplay.onInit()
 end)
 
+script.on_event(defines.events.on_player_created, function(event)
+    local player = game.players[event.player_index]
+    remote.openGui(player)
+end)
+
 script.on_event(defines.events.on_gui_opened, function(event)
     if not (event.entity and event.entity.valid) then return end
     local player = game.players[event.player_index]
@@ -21,12 +27,19 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
     if event.entity.name == "warp-console" then
         console.openGui(player)
-    else
-        console.closeGui(player)
     end
 
     if event.entity.name == "warp-reactor" then
         player.opened = nil
+    end
+end)
+
+script.on_event(defines.events.on_gui_closed, function(event)
+    local player = game.players[event.player_index]
+    if not player or not player.valid then return end
+
+    if event.element and event.element.valid then
+        console.closeGui(player)
     end
 end)
 
@@ -41,7 +54,13 @@ script.on_event(defines.events.on_object_destroyed, function(event)
 end)
 
 script.on_event(defines.events.on_tick, function()
+    warp.onTick()
     pollution.onTick()
+    remote.onTick()
+end)
+
+script.on_event(defines.events.on_research_finished, function()
+    remote.onResearchFinished()
 end)
 
 --- @param event EventData.on_built_entity
@@ -55,6 +74,9 @@ for name in pairs(gui.events) do
         if existingHandler then
             existingHandler(event)
         end
+        
+        if not event.element or not event.element.valid then return end
+
         gui.dispatch(event)
     end)
 end

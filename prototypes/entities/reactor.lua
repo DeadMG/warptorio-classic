@@ -14,14 +14,15 @@ data:extend({
     icon = "__space-exploration-graphics__/graphics/icons/gravimetrics-laboratory.png",
     icon_size = 64,
     flags = { "placeable-neutral", "placeable-player", "player-creation", "not-deconstructable" },
-    max_health = 700,
+    max_health = 5000,
     collision_box = {{-2, -2}, {2, 2}},
     selection_box = {{-2, -2}, {2, 2}},
     drawing_box = {{-2, -3}, {2, 5}},
     resistances = {
       {
-        type = "impact",
-        percent = 10
+        type = "physical",
+        percent = 30,
+        decrease = 5
       }
     },
     vehicle_impact_sound = { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
@@ -113,9 +114,48 @@ data:extend({
             }
         },
     },
-    crafting_categories = {"warp-polluter"},
+    crafting_categories = {"warp-reactor"},
     crafting_speed = 1,
-    energy_source = { type = "void", emissions_per_minute = { pollution = 10800 } },
+    energy_source = { type = "void", emissions_per_minute = { pollution = 1 } },
     energy_usage = "1W",
   },
+})
+
+local polluterRecipe = function(tint, name)
+    return {
+        type = "recipe",
+        name = "warp-reactor-" .. name,
+        category = "warp-reactor",
+        results = {},
+        ingredients = {},
+        energy_required = 3600000000,
+        hide_from_player_crafting = true,
+        hide_from_signal_gui = true,
+        hide_from_stats = true,
+        hidden_in_factoriopedia = true,
+        icons = {
+			{ icon = "__space-exploration-graphics__/graphics/icons/spaceship-console-base.png", icon_size = 64 },
+			{ icon = "__space-exploration-graphics__/graphics/icons/spaceship-console-mask.png", icon_size = 64, tint = tint },
+			{ icon = "__space-exploration-graphics__/graphics/icons/spaceship-console-white.png", icon_size = 64 },
+		},
+        crafting_machine_tint = {
+            primary = tint
+        }
+    }
+end
+
+local recipes = {}
+for k, v in ipairs(tints.warpReactorRecipes) do
+    table.insert(recipes, polluterRecipe(v, k))
+end
+
+data:extend(recipes)
+
+data:extend({
+    {
+        type = "recipe-category",
+        name = "warp-reactor",
+        hidden = true,
+        hidden_in_factoriopedia = true,
+    }
 })

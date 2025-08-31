@@ -1,5 +1,7 @@
+local identifiers = require("identifiers")
+
 if data.raw["tile"]["empty-space"] then
-    data.raw["tile"]["empty-space"].default_cover_tile = "warp-tile"
+    data.raw["tile"]["empty-space"].default_cover_tile = identifiers.warpTile
     return
 end
 
@@ -61,6 +63,6 @@ data:extend
         probability_expression = "-inf",
         default_enabled = false,
     },
-    default_cover_tile = "warp-tile"
+    default_cover_tile = identifiers.warpTile
   }
 }
