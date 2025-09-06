@@ -6,6 +6,7 @@ local pollution = require("control/pollution")
 local state = require("control/state")
 local reactor = require("control/reactor")
 local remote = require("control/remote")
+local tile = require("control/tile")
 
 script.on_init(function()
     state.onInit()
@@ -63,10 +64,14 @@ script.on_event(defines.events.on_research_finished, function()
     remote.onResearchFinished()
 end)
 
---- @param event EventData.on_built_entity
-function onCreated(event)
-    pollution.onCreated(event)
-end
+
+script.on_event(defines.events.on_player_mined_tile, function(event)
+    tile.onPlayerMinedTile(game.players[event.player_index], game.surfaces[event.surface_index], event.tiles)
+end)
+
+script.on_event(defines.events.on_player_built_tile, function(event)
+    tile.onPlayerBuiltTile(game.players[event.player_index], game.surfaces[event.surface_index], event.tile, event.tiles)
+end)
 
 for name in pairs(gui.events) do
     local existingHandler = script.get_event_handler(name)

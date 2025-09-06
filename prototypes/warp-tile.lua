@@ -22,6 +22,7 @@ data:extend({
         },
         collision_mask = { layers = { ['ground_tile'] = true } },
         check_collision_with_entities = true,
+        is_foundation = true,
     }),
     {
         type = 'recipe',
