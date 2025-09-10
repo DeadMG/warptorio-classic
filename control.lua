@@ -7,13 +7,14 @@ local state = require("control/state")
 local reactor = require("control/reactor")
 local remote = require("control/remote")
 local tile = require("control/tile")
+local starterchest = require("control/starterchest")
 
 script.on_init(function()
+    freeplay.onInit()
     state.onInit()
 
     warp.onInit()
-
-    freeplay.onInit()
+    starterchest.onInit()
 end)
 
 script.on_event(defines.events.on_player_created, function(event)
@@ -62,11 +63,6 @@ end)
 
 script.on_event(defines.events.on_research_finished, function()
     remote.onResearchFinished()
-end)
-
-
-script.on_event(defines.events.on_player_mined_tile, function(event)
-    tile.onPlayerMinedTile(game.players[event.player_index], game.surfaces[event.surface_index], event.tiles)
 end)
 
 script.on_event(defines.events.on_player_built_tile, function(event)

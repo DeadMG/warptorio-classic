@@ -7,6 +7,11 @@ local function getWarpzoneGracePeriodTicks(warpzone)
     return settings.global["warp-repeated-grace-period"].value * 60 * 60
 end
 
+local function starterChest()
+    return settings.global["warp-starter-chest"].value
+end
+
 return {
-    getWarpzoneGracePeriodTicks = getWarpzoneGracePeriodTicks
+    getWarpzoneGracePeriodTicks = getWarpzoneGracePeriodTicks,
+    starterChest = starterChest,
 }

@@ -30,8 +30,8 @@ local function onTick()
     local biter_wave_min = 7
 
     if (minutes > biter_wave_start) then
-        if (math.random() <= 0.01) then
-            local biters = biter_wave_min + (math.random() * (biter_wave_max - biter_wave_min))
+        if (math.random() <= 0.02) then
+            local biters = (biter_wave_min + (math.random() * (biter_wave_max - biter_wave_min))) / 2
             ground.set_multi_command({ command = { type = defines.command.attack_area, destination={0,0}, radius=12800 }, unit_count = biters })
         end
     end

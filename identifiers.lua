@@ -4,4 +4,8 @@ return {
     remoteHomeWarp = "warp-remote-home",
 
     warpTile = "warp-tile",
+
+    reactorReassemblyTechs = {
+        "warp-reactor-reassembly1",
+    },
 }

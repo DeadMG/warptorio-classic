@@ -91,7 +91,7 @@ local function refreshGui(player)
     local grace = settings.getWarpzoneGracePeriodTicks(state.currentWarpzone())
     local remainingGrace = math.max(0, grace - state.getWarpzoneTicks())
     if remainingGrace == 0 then
-        root[warpTimeHandle].caption = {"warp-remote.warp-time", renderTime(warp.timeTillAutowarp() / 60) }
+        root[warpTimeHandle].caption = {"warp-remote.warp-time", renderTime(warp.timeTillAutowarp(player.force) / 60) }
     else
         root[warpTimeHandle].caption = {"warp-remote.warp-grace", renderTime(remainingGrace / 60) }
     end

@@ -121,16 +121,27 @@ local function warpNext()
     game.delete_surface(originSurface)
 end
 
-local function autowarpTimer()
-    return settings.getWarpzoneGracePeriodTicks(state.currentWarpzone()) + (10 * 60 * 60)
+---@param force LuaForce
+local function autowarpAfterMinutes(force)
+    local technologies = force.technologies
+    if technologies[identifiers.reactorReassemblyTechs[1]].researched then return 30 end
+    return 20
 end
 
-local function timeTillAutowarp()
-    return autowarpTimer() - state.getWarpzoneTicks()
+---@param force LuaForce
+local function autowarpTimer(force)
+    return settings.getWarpzoneGracePeriodTicks(state.currentWarpzone()) + (autowarpAfterMinutes(force) * 60 * 60)
+end
+
+---@param force LuaForce
+local function timeTillAutowarp(force)
+    return autowarpTimer(force) - state.getWarpzoneTicks()
 end
 
 local function onTick()
-    if (timeTillAutowarp() <= 0) then warpNext() end
+    for _, force in pairs(game.forces) do
+        if (timeTillAutowarp(force) <= 0) then warpNext() end
+    end
 end
 
 return {

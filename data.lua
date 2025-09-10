@@ -6,3 +6,4 @@ require("prototypes/space-tile")
 
 require("prototypes/surfaces/factory")
 require("prototypes/technology/remote")
+require("prototypes/technology/reactor")
