@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/TypeScriptToLua/TypeScriptToLua/master/tsconfig-schema.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "moduleResolution": "node10",
+    "typeRoots": ["./node_modules"],
+    "types": ["@typescript-to-lua/language-extensions", "typed-factorio/settings", "typed-factorio/prototype", "typed-factorio/runtime"],
+    "strict": true,
+    "outDir": "./build",
+    "noEmitOnError": true,
+    "module": "amd",
+    "baseUrl": "./",
+    "noImplicitAny": true
+  },
+  "include": ["**/*.d.ts", "**/*.ts"],
+  "tstl": {
+    "noImplicitSelf": true,
+    "luaTarget": "5.2"
+  }
+}
