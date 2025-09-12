@@ -10,7 +10,15 @@ export const technologies = {
 
     warpReactorReassembly: [
         'warp-reactor-reassembly1'
-    ]
+    ],
+
+    mining: [
+        'warp-mining1',
+        'warp-mining2',
+        'warp-mining3',
+        'warp-mining4',
+        'warp-mining5',
+    ],
 } as const;
 
 export const entities = {
