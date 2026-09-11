@@ -1,28 +1,20 @@
 import { NamedNoiseExpression } from "factorio:prototype"
-import { tiles, entities } from "constants"
-
-const factoryPrefix = "factory";
-
-const factory = {
-    startingTiles: `${factoryPrefix}-starting-tiles`,
-    emptySpace: `${factoryPrefix}-empty-space`,
-    startingConsole: `${factoryPrefix}-starting-console`
-};
+import { tiles, entities, noiseExpressions } from "constants"
 
 data.extend<NamedNoiseExpression>([
     {
         type: "noise-expression",
-        name: factory.startingTiles,
+        name: noiseExpressions.factory.startingTiles,
         expression: "if((x >= 0) & (x <= 3) & (y >= 0) & (y <= 3), 1, 0)"
     },
     {
         type: "noise-expression",
-        name: factory.emptySpace,
-        expression: `${factory.startingTiles} == 0`
+        name: noiseExpressions.factory.emptySpace,
+        expression: `${noiseExpressions.factory.startingTiles} == 0`
     },
     {
         type: "noise-expression",
-        name: factory.startingConsole,
+        name: noiseExpressions.factory.startingConsole,
         expression: "x == 2 & y == 2"
     },
 ]);
@@ -52,9 +44,9 @@ settings.autoplace_settings = {
 };
 
 settings.property_expression_names = {
-    [`tile:${tiles.emptySpace}:probability`]: factory.emptySpace,
-    [`tile:${tiles.warpTile}:probability`]: factory.startingTiles,
-    [`entity:${entities.warpConsole}:probability`]: factory.startingConsole,
+    [`tile:${tiles.emptySpace}:probability`]: noiseExpressions.factory.emptySpace,
+    [`tile:${tiles.warpTile}:probability`]: noiseExpressions.factory.startingTiles,
+    [`entity:${entities.warpConsole}:probability`]: noiseExpressions.factory.startingConsole,
 };
 
 settings.moisture_climate_control = false;

@@ -5,6 +5,7 @@ import "prototypes/tiles/warp-tile"
 import "prototypes/tiles/space-tile"
 
 import "prototypes/surfaces/factory"
+import "prototypes/surfaces/logistics"
 
 import "prototypes/technology/remote"
 import "prototypes/technology/reactor"

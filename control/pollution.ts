@@ -1,7 +1,7 @@
 import { entities } from "constants";
 import { engageReactor } from "control/reactor";
 import { getWarpzoneGracePeriodTicks } from "control/settings"
-import { currentWarpzone, getWarpReactor, getWarpzoneTicks, surfaces } from "control/state"
+import { currentWarpzone, getWarpReactor, getWarpzoneTicks, currentSurfaces } from "control/state"
 
 // This should produce medium biters after ~15 minutes
 // and big biters after ~40 minutes
@@ -19,21 +19,21 @@ export function onTick() {
         engageReactor(getWarpReactor());
     }
 
-    const pollutingTicks = ticks - grace
-    const ground = surfaces().ground
+    const pollutingTicks = ticks - grace;
+    const ground = currentSurfaces().ground;
 
     ground.pollute([-1, -1], getPollution(pollutingTicks), entities.warpReactor);
 
     const minutes = pollutingTicks/3600;
 
     const biter_wave_start = 5;
-    const biter_wave_max = 10 + (minutes * 2.5);
-    const biter_wave_min = 7;
+    const biter_wave_range = 10;
+    const biter_wave_min = 10 + minutes;
 
     if (minutes > biter_wave_start) {
-        if (math.random() <= 0.02) {
-            const biters = (biter_wave_min + (math.random() * (biter_wave_max - biter_wave_min))) / 2
-            ground.set_multi_command({ command: { type: defines.command.attack_area, destination: [0,0], radius: 12800 }, unit_count: biters });
+        if (pollutingTicks % 1800 == 0) { // Every 30 seconds
+            const biters = Math.ceil(biter_wave_min + (math.random() * biter_wave_range));
+            ground.set_multi_command({ command: { type: defines.command.attack_area, destination: [0, 0], radius: 40 }, unit_count: biters, unit_search_distance: 12800 });
         }
     }
 }

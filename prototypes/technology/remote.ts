@@ -23,7 +23,7 @@ function remoteTech(name: string, cost: TechnologyUnit, extraPrereqs?: string[])
 }
 
 data.extend<TechnologyPrototype>([
-    remoteTech(technologies.remoteWarp, { count: 50, time: 5, ingredients: ingredients({ red: 5 }) }),
-    remoteTech(technologies.remoteFloorWarp, { count: 50, time: 5, ingredients: ingredients({ red: 5, green: 5 }) }, [technologies.remoteWarp]),
-    remoteTech(technologies.remoteHomeWarp, { count: 50, time: 5, ingredients: ingredients({ red: 5, green: 5, blue: 5 }) }, [technologies.remoteFloorWarp])
-])
+    remoteTech(technologies.remoteWarp, { count: 50, time: 5, ingredients: ingredients({ red: 1 }) }),
+    remoteTech(technologies.remoteFloorWarp, { count: 50, time: 5, ingredients: ingredients({ red: 1, green: 1 }) }, [technologies.remoteWarp]),
+    remoteTech(technologies.remoteHomeWarp, { count: 50, time: 5, ingredients: ingredients({ red: 1, green: 1, blue: 1 }) }, [technologies.remoteFloorWarp])
+]);

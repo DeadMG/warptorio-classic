@@ -1,5 +1,5 @@
 import { entities } from "constants";
-import { surfaces } from "control/state";
+import { currentSurfaces } from "control/state";
 import { teleportToSurface } from "control/surfaces";
 import { warpNext } from "control/warp";
 import { LuaPlayer, OnGuiClickEvent } from "factorio:runtime"
@@ -28,15 +28,21 @@ const handlers = {
 
     teleport_to_ground: (e: OnGuiClickEvent) => {
         const player = game.players[e.player_index];
-        teleportToSurface(player, surfaces().ground);
+        teleportToSurface(player, currentSurfaces().ground);
         closeGui(player);
     },
 
     teleport_to_factory: (e: OnGuiClickEvent) => {
         const player = game.players[e.player_index];
-        teleportToSurface(player, surfaces().factory);
+        teleportToSurface(player, currentSurfaces().factory);
         closeGui(player);
-    }
+    },
+
+    teleport_to_logistics: (e: OnGuiClickEvent) => {
+        const player = game.players[e.player_index];
+        teleportToSurface(player, currentSurfaces().logistics);
+        closeGui(player);
+    },
 }
 
 gui.add_handlers(handlers, null, name)
@@ -44,7 +50,8 @@ gui.add_handlers(handlers, null, name)
 function createWindow(player: LuaPlayer) {
     const warpControls: gui.ElemDefinition[] = [
         { type: "button", caption: ["warp-panel.teleport-to-ground"], handler: handlers.teleport_to_ground },
-        { type: "button", caption: ["warp-panel.teleport-to-factory"], handler: handlers.teleport_to_factory }
+        { type: "button", caption: ["warp-panel.teleport-to-factory"], handler: handlers.teleport_to_factory },
+        { type: "button", caption: ["warp-panel.teleport-to-logistics"], handler: handlers.teleport_to_logistics }
     ];
 
     const mainControls: gui.ElemDefinition[] = [

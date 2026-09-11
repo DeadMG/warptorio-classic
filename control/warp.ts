@@ -1,7 +1,7 @@
 import { entities, technologies, tiles } from "constants";
-import { currentWarpzone, getWarpzoneTicks, nextWarpzone, setNextWarpzone, surfaces } from "control/state";
+import { currentWarpzone, getWarpzoneTicks, nextWarpzone, setNextWarpzone, currentSurfaces } from "control/state";
 import { getSurface, teleportToSurface } from "control/surfaces";
-import { LuaForce, LuaPlayer, TileWrite } from "factorio:runtime";
+import { LuaForce, LuaPlayer } from "factorio:runtime";
 import * as reactor from "control/reactor";
 import { getWarpzoneGracePeriodTicks } from "control/settings";
 
@@ -49,8 +49,9 @@ function canWarpAnywhere(player: LuaPlayer) {
 }
 
 function canWarpHere(player: LuaPlayer) {
-    if (player.surface == surfaces().factory) return true
-    if (player.surface != surfaces().ground) return false // Unknown 3rd party surface?
+    if (player.surface == currentSurfaces().factory) return true
+    if (player.surface == currentSurfaces().logistics) return true
+    if (player.surface != currentSurfaces().ground) return false // Unknown 3rd party surface?
 
     const tile = player.surface.get_tile(player.position.x, player.position.y);
     return tile.name == tiles.warpTile;
@@ -61,7 +62,7 @@ export function isPlayerWarpable(player: LuaPlayer) {
 }
 
 export function warpNext() {
-    const originSurface = surfaces().ground
+    const originSurface = currentSurfaces().ground
 
     for (const [_, player] of game.players) {
         if (canWarpHere(player)) continue;

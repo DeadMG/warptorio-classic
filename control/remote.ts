@@ -1,4 +1,4 @@
-import { currentWarpzone, getWarpzoneTicks, surfaces } from "control/state";
+import { currentWarpzone, getWarpzoneTicks, currentSurfaces } from "control/state";
 import { teleportToSurface } from "control/surfaces";
 import { isPlayerWarpable, timeTillAutowarp, warpNext } from "control/warp";
 import { LocalisedString, LuaPlayer, OnGuiClickEvent } from "factorio:runtime";
@@ -12,6 +12,7 @@ const controlParent = "control-parent";
 const warpButton = "warp-button";
 const factoryFloorButton = "warp-factory-floor-button";
 const groundFloorButton = "warp-ground-floor-button";
+const logisticsFloorButton = "warp-logistics-floor-button";
 
 function parent(player: LuaPlayer) {
     return player.gui.left;
@@ -43,7 +44,7 @@ const handlers = {
             return;
         }
 
-        teleportToSurface(player, surfaces().ground);
+        teleportToSurface(player, currentSurfaces().ground);
     },
 
     teleport_to_factory: (e: OnGuiClickEvent) => {
@@ -53,7 +54,17 @@ const handlers = {
             return;
         }
 
-        teleportToSurface(player, surfaces().factory);
+        teleportToSurface(player, currentSurfaces().factory);
+    },
+
+    teleport_to_logistics: (e: OnGuiClickEvent) => {
+        const player = game.players[e.player_index]
+        if (!isPlayerWarpable(player)) {
+            player.print(["warp-error.require-home"]);
+            return;
+        }
+
+        teleportToSurface(player, currentSurfaces().logistics);
     }
 }
 
@@ -80,6 +91,7 @@ function warpControls(player: LuaPlayer) {
         { name: warpButton, enabled: player.force.technologies[technologies.remoteWarp].researched },
         { name: groundFloorButton, enabled: player.force.technologies[technologies.remoteFloorWarp].researched },
         { name: factoryFloorButton, enabled: player.force.technologies[technologies.remoteFloorWarp].researched },
+        { name: logisticsFloorButton, enabled: player.force.technologies[technologies.remoteFloorWarp].researched },
     ];
 }
 
@@ -114,6 +126,7 @@ function createWindow(player: LuaPlayer) {
             { type: "flow", name: controlParent, direction: "vertical", children: [
                 { type: "button", name: groundFloorButton, caption: ["warp-panel.teleport-to-ground"], handler: handlers.teleport_to_ground },
                 { type: "button", name: factoryFloorButton, caption: ["warp-panel.teleport-to-factory"], handler: handlers.teleport_to_factory },
+                { type: "button", name: logisticsFloorButton, caption: ["warp-panel.teleport-to-logistics"], handler: handlers.teleport_to_logistics },
                 { type: "button", name: warpButton, caption: ["warp-panel.warp"], handler: handlers.on_warp }
             ]}]});
 

@@ -45,3 +45,21 @@ export const settings = {
     repeatedGracePeriod: 'warp-repeated-grace-period',
     starterChest: 'warp-starter-chest'
 } as const;
+
+export const surfaces = {
+    factory: "factory",
+    logistics: "logistics",
+} as const;
+
+export const noiseExpressions = {
+    factory: {
+        startingTiles: `${surfaces.factory}_starting_tiles`,
+        emptySpace: `${surfaces.factory}_empty_space`,
+        startingConsole: `${surfaces.factory}_starting_console`
+    },
+    logistics: {
+        startingTiles: `${surfaces.logistics}_starting_tiles`,
+        emptySpace: `${surfaces.logistics}_empty_space`,
+        startingConsole: `${surfaces.logistics}_starting_console`
+    }
+} as const;

@@ -1,3 +1,4 @@
+import { surfaces } from "constants";
 import { LuaEntity, LuaSurface, OnObjectDestroyedEvent } from "factorio:runtime";
 
 declare const storage: {
@@ -26,9 +27,10 @@ export function getWarpzoneTicks() {
     return game.tick - storage.warp_zone_start_tick;
 }
 
-export function surfaces() {
+export function currentSurfaces() {
     return {
         factory: game.surfaces.nauvis,
+        logistics: game.surfaces[surfaces.logistics],
         ground: storage.current_surface
     };
 }

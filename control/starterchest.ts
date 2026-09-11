@@ -1,5 +1,5 @@
 import { starterChest } from "control/settings";
-import { surfaces } from "control/state";
+import { currentSurfaces } from "control/state";
 
 const chestContents = [
     { name: "stone", count: 20 },
@@ -26,7 +26,7 @@ const chestContents = [
 export function onInit() {
     if (!starterChest()) return;
 
-    const ground = surfaces().ground
+    const ground = currentSurfaces().ground;
 
     const starter = ground.create_entity({
         name: "steel-chest",

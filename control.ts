@@ -9,24 +9,26 @@ import * as reactor from "control/reactor";
 import * as pollution from "control/pollution";
 import * as tile from "control/tile";
 import { entities } from "constants";
+import * as logistics from "control/logistics"
 
 script.on_init(() => { 
-    freeplay.onInit()
-    state.onInit()
+    freeplay.onInit();
+    state.onInit();
 
-    warp.onInit()
-    starterchest.onInit()
+    logistics.onInit();
+    warp.onInit();
+    starterchest.onInit();
 });
 
 script.on_event(defines.events.on_player_created, event => {
-    remote.openGui(game.players[event.player_index])
+    remote.openGui(game.players[event.player_index]);
 });
 
 script.on_event(defines.events.on_gui_opened, event => {
-    if (event.entity?.valid != true) return
+    if (event.entity?.valid != true) return;
 
-    const player = game.players[event.player_index]
-    if (player?.valid != true) return
+    const player = game.players[event.player_index];
+    if (player?.valid != true) return;
 
     if (event.entity.name == entities.warpConsole) {
         console.openGui(player);
@@ -38,8 +40,8 @@ script.on_event(defines.events.on_gui_opened, event => {
 });
 
 script.on_event(defines.events.on_gui_closed, event => {
-    const player = game.players[event.player_index]
-    if (player?.valid != true) return
+    const player = game.players[event.player_index];
+    if (player?.valid != true) return;
 
     if (event.element?.valid == true) {
         console.closeGui(player);
@@ -53,21 +55,21 @@ script.on_event(defines.events.on_entity_cloned, event => {
 });
 
 script.on_event(defines.events.on_object_destroyed, event => {
-    reactor.onDestroyed(event)
+    reactor.onDestroyed(event);
 });
 
 script.on_event(defines.events.on_tick, () => {
-    warp.onTick()
-    pollution.onTick()
-    remote.onTick()
+    warp.onTick();
+    pollution.onTick();
+    remote.onTick();
 });
 
 script.on_event(defines.events.on_research_finished, () => {
-    remote.onResearchFinished()
+    remote.onResearchFinished();
 });
 
 script.on_event(defines.events.on_player_built_tile, event => {
-    tile.onPlayerBuiltTile(game.players[event.player_index], game.surfaces[event.surface_index], event.tile, event.tiles)
+    tile.onPlayerBuiltTile(game.players[event.player_index], game.surfaces[event.surface_index], event.tile, event.tiles);
 });
 
 for (const name in gui.events) {
