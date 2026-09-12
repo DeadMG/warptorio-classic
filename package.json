@@ -1,12 +1,12 @@
 {
   "devDependencies": {
-    "gulp": "^5.0.1",
-    "lua-types": "^2.13.1",
-    "typed-factorio": "^3.30.0",
-    "typescript": "^5.8.2",
-    "typescript-to-lua": "^1.32.0"
+    "gulp": "5.0.1",
+    "lua-types": "2.14.1",
+    "typed-factorio": "4.2.0",
+    "typescript": "^6.0.2",
+    "typescript-to-lua": "1.37.1"
   },
   "dependencies": {
-    "node": "^20.19.5"
+    "node": "^26.8.2"
   }
 }
