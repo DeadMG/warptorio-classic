@@ -1,47 +1,45 @@
-import { LuaPlayer, LuaSurface, MapGenSettings, PropertyExpressionNames } from "factorio:runtime";
-import { tiles, entities } from "constants"
+import { setSurfaceClear, SurfaceClearAction } from "control/state";
+import { LuaPlayer, LuaSurface } from "factorio:runtime";
 
-function preventAutoplace(settings: MapGenSettings | undefined): MapGenSettings {
-    const propertyNames: PropertyExpressionNames = {
-        ...(settings?.property_expression_names ?? {}),
-        [`entity:${entities.warpConsole}:probability`]: '-inf',
-        [`tile:${tiles.emptySpace}:probability`]: '-inf',
-        [`tile:${tiles.warpTile}:probability`]: "-inf"
-    };
+export function createSurfaceFor(planet: string, action: SurfaceClearAction) {
+    const surface = createNewSurface(planet);
 
-    return {
-        ...(settings! ?? {}),
-        property_expression_names: propertyNames
+    surface.map_gen_settings = {
+        ...surface.map_gen_settings,
+        seed: math.random() * 4294967295
     };
+    
+    surface.clear();
+
+    setSurfaceClear(surface.index, action);
 }
 
-const surfaces = {
-    nauvis: {
-        default: preventAutoplace(prototypes.map_gen_preset["default"].basic_settings)
-    }
-};
+export function createNewSurface(planet: string) {
+    return getInternalPlanet(planet).create_surface();
+}
 
-export function getSurface(planet: string, type: string): MapGenSettings {
-    return {
-        ...surfaces.nauvis.default,
-        seed: math.random(0, (2 ^ 32) - 1)
-    };
+function getInternalPlanet(planet: string) {    
+    const existing = game.planets[`${planet}-a`].surface;
+    if (existing) {
+        return game.planets[`${planet}-b`];
+    }
+    return game.planets[`${planet}-a`];
 }
 
 export function teleportToSurface(player: LuaPlayer, surface: LuaSurface, force?: boolean) {
     if (!force && player.surface != surface) {
         const pos = surface.find_non_colliding_position("character", player.position, 128, 1, true)
         if (pos) {
-            player.teleport(pos, surface)
-            return
+            player.teleport(pos, surface);
+            return;
         }
     }
 
     const pos = surface.find_non_colliding_position("character", [0, 1], 128, 1, true)
     if (pos) {
-        player.teleport(pos, surface)
-        return
+        player.teleport(pos, surface);
+        return;
     }
 
-    player.print("warp-error.no-position")
+    player.print("warp-error.no-position");
 }

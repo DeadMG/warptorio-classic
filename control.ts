@@ -2,7 +2,6 @@ import * as gui from "__flib__.gui";
 import * as freeplay from "control/freeplay";
 import * as state from "control/state";
 import * as warp from "control/warp";
-import * as starterchest from "control/starterchest";
 import * as remote from "control/remote";
 import * as console from "control/console";
 import * as reactor from "control/reactor";
@@ -17,7 +16,6 @@ script.on_init(() => {
 
     logistics.onInit();
     warp.onInit();
-    starterchest.onInit();
 });
 
 script.on_event(defines.events.on_player_created, event => {
@@ -70,6 +68,16 @@ script.on_event(defines.events.on_research_finished, () => {
 
 script.on_event(defines.events.on_player_built_tile, event => {
     tile.onPlayerBuiltTile(game.players[event.player_index], game.surfaces[event.surface_index], event.tile, event.tiles);
+});
+
+script.on_event(defines.events.on_surface_cleared, event => {
+    const action = state.surfaceOnClearAction(event.surface_index);
+    if (action == state.SurfaceClearAction.InitStartingSurface) {
+        warp.initStartingSurface(game.get_surface(event.surface_index)!);
+    }
+    if (action == state.SurfaceClearAction.ContinueWarpTeleport) {
+        warp.continueWarpTeleport(game.get_surface(event.surface_index)!);
+    }
 });
 
 for (const name in gui.events) {

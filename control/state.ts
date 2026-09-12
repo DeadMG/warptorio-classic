@@ -1,12 +1,19 @@
 import { surfaces } from "constants";
 import { LuaEntity, LuaSurface, OnObjectDestroyedEvent } from "factorio:runtime";
 
+export enum SurfaceClearAction {
+    InitStartingSurface,
+    ContinueWarpTeleport
+}
+
 declare const storage: {
     next_warp_zone: number;
     warp_zone_start_tick: number;
     current_surface: LuaSurface;
     reactor: LuaEntity;
     reactor_destruction: number;
+
+    surface_on_clear: { surface_index: number; action: SurfaceClearAction; }[];
 };
 
 export function setNextWarpzone(surface: LuaSurface) {
@@ -37,7 +44,8 @@ export function currentSurfaces() {
 
 export function onInit() {
     storage.next_warp_zone = 1;
-    storage.warp_zone_start_tick = 0;
+    storage.warp_zone_start_tick = 600;
+    storage.surface_on_clear = [];
 }
 
 export function setCurrentReactor(reactor: LuaEntity) {
@@ -51,4 +59,17 @@ export function getWarpReactor() {
 
 export function isCurrentReactorDestroyed(event: OnObjectDestroyedEvent) {
     return event.registration_number == storage.reactor_destruction;
+}
+
+export function setSurfaceClear(surface_index: number, action: SurfaceClearAction){
+    storage.surface_on_clear.push({ surface_index: surface_index, action: action });
+}
+
+export function surfaceOnClearAction(surface_index: number) {
+    const record = storage.surface_on_clear.find(x => x.surface_index == surface_index);
+    if (record) {
+        storage.surface_on_clear = storage.surface_on_clear.filter(x => x.surface_index != surface_index);
+        return record.action;
+    }
+    return null;
 }

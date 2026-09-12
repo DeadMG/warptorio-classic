@@ -8,7 +8,7 @@ function remoteTech(name: string, cost: TechnologyUnit, extraPrereqs?: string[])
         icon_size: 128,
         icons: [
             {
-                icon: "__warptorio-classic__/graphics/remote-control.png",
+                icon: "__warp-age__/graphics/remote-control.png",
                 tint: tints.primary,
                 icon_size: 512,
             }

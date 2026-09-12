@@ -125,7 +125,7 @@ function polluterRecipe(tint: Color, name: string): RecipePrototype {
     return {
         type: "recipe",
         name: name,
-        category: craftingCategories.warpReactor,
+        categories: [craftingCategories.warpReactor],
         results: [],
         ingredients: [],
         energy_required: 3600000000,

@@ -1,9 +1,10 @@
 import { entities, technologies, tiles } from "constants";
-import { currentWarpzone, getWarpzoneTicks, nextWarpzone, setNextWarpzone, currentSurfaces } from "control/state";
-import { getSurface, teleportToSurface } from "control/surfaces";
-import { LuaForce, LuaPlayer } from "factorio:runtime";
+import { currentWarpzone, getWarpzoneTicks, setNextWarpzone, currentSurfaces, SurfaceClearAction } from "control/state";
+import { createSurfaceFor, teleportToSurface } from "control/surfaces";
+import { LuaForce, LuaPlayer, LuaSurface } from "factorio:runtime";
 import * as reactor from "control/reactor";
 import { getWarpzoneGracePeriodTicks } from "control/settings";
+import * as starterchest from "control/starterchest";
 
 function range(start: number, end: number) {
     const result: number[] = [];
@@ -14,21 +15,24 @@ function range(start: number, end: number) {
 }
 
 export function onInit() {
-    const surface = game.create_surface(`warp-zone-${nextWarpzone()}`, getSurface("nauvis", "default"))
-    surface.request_to_generate_chunks([0, 0])
-    surface.force_generate_chunk_requests()
+    createSurfaceFor("nauvis", SurfaceClearAction.InitStartingSurface);
+}
+
+export function initStartingSurface(surface: LuaSurface) {
+    surface.request_to_generate_chunks([0, 0]);
+    surface.force_generate_chunk_requests();
 
     surface.set_tiles(range(0, 3).flatMap(x => range(-4, 2).map(y => ({ name: tiles.warpTile, position: { x, y } }))));
 
     for (const x of range(1, 2)) {
         for (const y of range(0, 1)) {
-            surface.set_hidden_tile({ x, y }, undefined)
+            surface.set_hidden_tile({ x, y }, undefined);
         }
     }
 
     for (const x of range(0, 3)) {
         for (const y of range(-4, -1)) {
-            surface.set_hidden_tile({ x, y }, undefined)
+            surface.set_hidden_tile({ x, y }, undefined);
         }
     }
 
@@ -42,6 +46,7 @@ export function onInit() {
 
     setNextWarpzone(surface);
     reactor.onInit(surface);
+    starterchest.onInit();
 }
 
 function canWarpAnywhere(player: LuaPlayer) {
@@ -62,7 +67,7 @@ export function isPlayerWarpable(player: LuaPlayer) {
 }
 
 export function warpNext() {
-    const originSurface = currentSurfaces().ground
+    const originSurface = currentSurfaces().ground;
 
     for (const [_, player] of game.players) {
         if (canWarpHere(player)) continue;
@@ -77,14 +82,19 @@ export function warpNext() {
         game.set_game_state({ can_continue: false, game_finished: true, player_won: false });
     }
 
+    createSurfaceFor("nauvis", SurfaceClearAction.ContinueWarpTeleport);
+}
+
+export function continueWarpTeleport(newSurface: LuaSurface) {
+    const originSurface = currentSurfaces().ground;
+
     const warp_tiles = originSurface.find_tiles_filtered({ name: tiles.warpTile });
-    const newSurface = game.create_surface(`warp-zone-${nextWarpzone()}`, getSurface("nauvis", "default"));
 
     for (const tile of warp_tiles) {
         newSurface.request_to_generate_chunks(tile.position);
     }
 
-    newSurface.force_generate_chunk_requests()
+    newSurface.force_generate_chunk_requests();
 
     originSurface.clone_brush({
         source_positions: warp_tiles.map(x => x.position),

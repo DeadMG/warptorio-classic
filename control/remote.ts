@@ -135,21 +135,21 @@ function createWindow(player: LuaPlayer) {
 }
 
 export function openGui(player: LuaPlayer) {
-    if (parent(player)[name]) return
+    if (parent(player)[name]) return;
 
-    createWindow(player)
+    createWindow(player);
 }
 
 export function onResearchFinished() {
     for (const [_, player] of game.players) {
-        refreshGui(player)
+        refreshGui(player);
     }
 }
 
 export function onTick() {
     if (getWarpzoneTicks() % 60 == 0) {
         for (const [_, player] of game.players) {
-            refreshGui(player)            
+            refreshGui(player);    
         }
     }
 }

@@ -25,10 +25,10 @@ data.extend<TilePrototype | RecipePrototype | ItemPrototype>([
     {
         type: 'recipe',
         name: tiles.warpTile,
-        category: 'crafting',
+        categories: ['crafting'],
         order: "b[concrete]-a[plain]",
         subgroup: 'terrain',
-		icons: [{ icon: "__warptorio-classic__/graphics/warp-tile.png", tint: tints.primary, icon_size: 64 }],
+		icons: [{ icon: "__warp-age__/graphics/warp-tile.png", tint: tints.primary, icon_size: 64 }],
         ingredients: [
             { type: "item", name: "copper-plate", amount: 50 },
             { type: "item", name: "stone-brick", amount: 25 }
@@ -43,7 +43,7 @@ data.extend<TilePrototype | RecipePrototype | ItemPrototype>([
         type: 'item',
         name: tiles.warpTile,
         stack_size: 50,
-		icons: [{ icon: "__warptorio-classic__/graphics/warp-tile.png", tint: tints.primary, icon_size: 64 }],
+		icons: [{ icon: "__warp-age__/graphics/warp-tile.png", tint: tints.primary, icon_size: 64 }],
         place_as_tile: {
             result: tiles.warpTile,
             condition: { layers: { ["ground_tile"]: true } },

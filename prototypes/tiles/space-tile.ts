@@ -46,7 +46,7 @@ if (data.raw["tile"]["empty-space"]) {
             main:
             [
                 {
-                picture: "__warptorio-classic__/graphics/space-tile.png",
+                picture: "__warp-age__/graphics/space-tile.png",
                 count: 1,
                 size: 1
                 }
