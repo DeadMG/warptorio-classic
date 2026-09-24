@@ -1,7 +1,7 @@
 import { entities, technologies, tiles } from "constants";
-import { currentWarpzone, getWarpzoneTicks, setNextWarpzone, currentSurfaces, SurfaceClearAction } from "control/state";
+import { currentWarpzone, getWarpzoneTicks, setNextWarpzone, currentSurfaces } from "control/state";
 import { createSurfaceFor, teleportToSurface } from "control/surfaces";
-import { LuaForce, LuaPlayer, LuaSurface } from "factorio:runtime";
+import { LuaForce, LuaPlayer } from "factorio:runtime";
 import * as reactor from "control/reactor";
 import { getWarpzoneGracePeriodTicks } from "control/settings";
 import * as starterchest from "control/starterchest";
@@ -15,10 +15,8 @@ function range(start: number, end: number) {
 }
 
 export function onInit() {
-    createSurfaceFor("nauvis", SurfaceClearAction.InitStartingSurface);
-}
+    const surface = createSurfaceFor("nauvis");
 
-export function initStartingSurface(surface: LuaSurface) {
     surface.request_to_generate_chunks([0, 0]);
     surface.force_generate_chunk_requests();
 
@@ -82,11 +80,7 @@ export function warpNext() {
         game.set_game_state({ can_continue: false, game_finished: true, player_won: false });
     }
 
-    createSurfaceFor("nauvis", SurfaceClearAction.ContinueWarpTeleport);
-}
-
-export function continueWarpTeleport(newSurface: LuaSurface) {
-    const originSurface = currentSurfaces().ground;
+    const newSurface = createSurfaceFor("nauvis");
 
     const warp_tiles = originSurface.find_tiles_filtered({ name: tiles.warpTile });
 

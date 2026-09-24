@@ -70,16 +70,6 @@ script.on_event(defines.events.on_player_built_tile, event => {
     tile.onPlayerBuiltTile(game.players[event.player_index], game.surfaces[event.surface_index], event.tile, event.tiles);
 });
 
-script.on_event(defines.events.on_surface_cleared, event => {
-    const action = state.surfaceOnClearAction(event.surface_index);
-    if (action == state.SurfaceClearAction.InitStartingSurface) {
-        warp.initStartingSurface(game.get_surface(event.surface_index)!);
-    }
-    if (action == state.SurfaceClearAction.ContinueWarpTeleport) {
-        warp.continueWarpTeleport(game.get_surface(event.surface_index)!);
-    }
-});
-
 for (const name in gui.events) {
     const existingHandler = script.get_event_handler(name);
 

@@ -1,17 +1,14 @@
-import { setSurfaceClear, SurfaceClearAction } from "control/state";
 import { LuaPlayer, LuaSurface } from "factorio:runtime";
 
-export function createSurfaceFor(planet: string, action: SurfaceClearAction) {
+export function createSurfaceFor(planet: string) {
     const surface = createNewSurface(planet);
 
     surface.map_gen_settings = {
         ...surface.map_gen_settings,
         seed: math.random() * 4294967295
     };
-    
-    surface.clear();
 
-    setSurfaceClear(surface.index, action);
+    return surface;
 }
 
 export function createNewSurface(planet: string) {
